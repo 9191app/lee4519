@@ -15,7 +15,8 @@ describe Hanami::Commands::New::Container do
 
     it 'validates test option' do
       with_temp_dir do |original_wd|
-        -> { Hanami::Commands::New::Container.new({test: 'unknown'}, nil) }.must_raise ArgumentError
+        exception = -> { Hanami::Commands::New::Container.new({test: 'unknown'}, 'new_container') }.must_raise ArgumentError
+        exception.message.must_equal "Unknown test framework 'unknown'. Please use one of 'rspec', 'minitest'"
       end
     end
 
