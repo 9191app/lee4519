@@ -6,10 +6,17 @@ describe Hanami::Commands::New::Container do
   describe 'with invalid arguments' do
     it 'requires application name' do
       with_temp_dir do |original_wd|
-        -> { Hanami::Commands::New::Container.new({}, nil) }.must_raise ArgumentError
-        -> { Hanami::Commands::New::Container.new({}, '') }.must_raise ArgumentError
-        -> { Hanami::Commands::New::Container.new({}, '  ') }.must_raise ArgumentError
-        -> { Hanami::Commands::New::Container.new({}, 'foo/bar') }.must_raise ArgumentError
+        exception = -> { Hanami::Commands::New::Container.new({}, nil) }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+
+        exception = -> { Hanami::Commands::New::Container.new({}, '') }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+
+        exception = -> { Hanami::Commands::New::Container.new({}, '  ') }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+
+        exception = -> { Hanami::Commands::New::Container.new({}, 'foo/bar') }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
       end
     end
 
@@ -22,7 +29,8 @@ describe Hanami::Commands::New::Container do
 
     it 'validates database option' do
       with_temp_dir do |original_wd|
-        -> { Hanami::Commands::New::Container.new({database: 'unknown'}, nil) }.must_raise ArgumentError
+        exception = -> { Hanami::Commands::New::Container.new({database: 'unknown'}, 'new_container') }.must_raise RuntimeError
+        exception.message.must_equal '"unknown" is not a valid database type'
       end
     end
   end

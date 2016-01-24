@@ -6,10 +6,17 @@ describe Hanami::Commands::New::App do
   describe 'with invalid arguments' do
     it 'requires application name' do
       with_temp_dir do |original_wd|
-        -> { Hanami::Commands::New::App.new({}, nil) }.must_raise ArgumentError
-        -> { Hanami::Commands::New::App.new({}, '') }.must_raise ArgumentError
-        -> { Hanami::Commands::New::App.new({}, '  ') }.must_raise ArgumentError
-        -> { Hanami::Commands::New::App.new({}, 'foo/bar') }.must_raise ArgumentError
+        exception = -> { Hanami::Commands::New::App.new({}, nil) }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+
+        exception = -> { Hanami::Commands::New::App.new({}, '') }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+
+        exception = -> { Hanami::Commands::New::App.new({}, '  ') }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+
+        exception = -> { Hanami::Commands::New::App.new({}, 'foo/bar') }.must_raise ArgumentError
+        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
       end
     end
 
@@ -22,13 +29,8 @@ describe Hanami::Commands::New::App do
 
     it 'validates database option' do
       with_temp_dir do |original_wd|
-        -> { Hanami::Commands::New::App.new({database: 'unknown'}, nil) }.must_raise ArgumentError
-      end
-    end
-
-    it 'does not support application_name' do
-      with_temp_dir do |original_wd|
-        -> { Hanami::Commands::New::App.new({application_name: 'application_name'}, nil) }.must_raise ArgumentError
+        exception = -> { Hanami::Commands::New::App.new({database: 'unknown'}, 'new_app') }.must_raise RuntimeError
+        exception.message.must_equal '"unknown" is not a valid database type'
       end
     end
   end
