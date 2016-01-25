@@ -7,16 +7,16 @@ describe Hanami::Commands::New::Container do
     it 'requires application name' do
       with_temp_dir do |original_wd|
         exception = -> { Hanami::Commands::New::Container.new({}, nil) }.must_raise ArgumentError
-        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+        exception.message.must_equal 'APPLICATION_NAME is required and must not contain /.'
 
         exception = -> { Hanami::Commands::New::Container.new({}, '') }.must_raise ArgumentError
-        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+        exception.message.must_equal 'APPLICATION_NAME is required and must not contain /.'
 
         exception = -> { Hanami::Commands::New::Container.new({}, '  ') }.must_raise ArgumentError
-        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+        exception.message.must_equal 'APPLICATION_NAME is required and must not contain /.'
 
         exception = -> { Hanami::Commands::New::Container.new({}, 'foo/bar') }.must_raise ArgumentError
-        exception.message.must_equal 'APPLICATION_NAME is requried and must not contain /.'
+        exception.message.must_equal 'APPLICATION_NAME is required and must not contain /.'
       end
     end
 

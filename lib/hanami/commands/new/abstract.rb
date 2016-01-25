@@ -100,7 +100,7 @@ module Hanami
 
         def assert_name!
           if @name.nil? || @name.strip == '' || @name.include?(File::SEPARATOR)
-            raise ArgumentError.new("APPLICATION_NAME is requried and must not contain #{File::SEPARATOR}.")
+            raise ArgumentError.new("APPLICATION_NAME is required and must not contain #{File::SEPARATOR}.")
           end
         end
 
